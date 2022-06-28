@@ -1,5 +1,5 @@
 {
-    "name": "fiscal-printer",
+    "name": "fiscalprinter",
     "author": "harvey7",
     "version": "1.0.4",
     "description": "A typescript module for fiscal printers support.",
