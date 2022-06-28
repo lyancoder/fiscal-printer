@@ -9,6 +9,29 @@ export class EpsonXmlHttpClient extends FPrinter.Client {
     private static XML_ROOT = 's:Envelope';
     private static XML_BODY = 's:Body';
     private static XML_RESPONSE = 'response';
+    private static COMMAND_CODE = {
+        [Fiscal.CommandCode.OPEN_DRAWER]: (printerCommand: xmlbuilder.XMLElement, command: Fiscal.Command) => {
+            printerCommand.ele('openDrawer', {
+                operator: command.data?.operator ?? 1
+            });
+        }, 
+        [Fiscal.CommandCode.QUERY_PRINTER_STATUS]: (printerCommand: xmlbuilder.XMLElement, command: Fiscal.Command) => {
+            printerCommand.ele('queryPrinterStatus', {
+                operator: command.data?.operator ?? 1,
+                statusType: command.data?.statusType ?? 0
+            });
+        }, 
+        [Fiscal.CommandCode.REBOOT_WEB_SERVER]: (printerCommand: xmlbuilder.XMLElement, command: Fiscal.Command) => {
+            printerCommand.ele('rebootWebServer', {
+                operator: command.data?.operator ?? 1
+            });
+        }, 
+        [Fiscal.CommandCode.RESET_PRINTER]: (printerCommand: xmlbuilder.XMLElement, command: Fiscal.Command) => {
+            printerCommand.ele('resetPrinter', {
+                operator: command.data?.operator ?? 1
+            });
+        }, 
+    }
 
     /**
      * commercial document
@@ -449,10 +472,13 @@ export class EpsonXmlHttpClient extends FPrinter.Client {
     private convertCommandToXmlDoc(...commands: Fiscal.Command[]): xmlbuilder.XMLDocument {
         const printerCommand = xmlbuilder.create(commands.length > 1 ? 'printerCommands' : 'printerCommand');
         for (const command of commands) {
-            if (command.code === Fiscal.CommandCode.OPEN_DRAWER) {
-                printerCommand.ele('openDrawer', {
-                    operator: command.data?.operator ?? 1
-                });
+            // if (command.code === Fiscal.CommandCode.OPEN_DRAWER) {
+            //     printerCommand.ele('openDrawer', {
+            //         operator: command.data?.operator ?? 1
+            //     });
+            // }
+            if (EpsonXmlHttpClient.COMMAND_CODE[command.code]) {
+                EpsonXmlHttpClient.COMMAND_CODE[command.code](printerCommand, command);
             }
         }
         return printerCommand;

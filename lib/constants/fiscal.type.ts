@@ -254,9 +254,9 @@ export namespace Fiscal {
         // PRINT_REC_VOID,
         // QUERY_CONTENT_BY_DATE,
         // QUERY_CONTENT_BY_NUMBERS,
-        // QUERY_PRINTER_STATUS,
-        // REBOOT_WEB_SERVER,
-        // RESET_PRINTER,
+        QUERY_PRINTER_STATUS,
+        REBOOT_WEB_SERVER,
+        RESET_PRINTER,
         // SET_DATE,
         // SET_LOGO,
     }
