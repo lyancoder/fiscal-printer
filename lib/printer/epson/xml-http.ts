@@ -170,16 +170,19 @@ export class EpsonXmlHttpClient extends FPrinter.Client {
      */
     private async parseResponse(xmlStr: string): Promise<FPrinter.Response> {
         // create xml parser
+        let response;
         // explicitArray: Always put child nodes in an array if true; otherwise an array is created only if there is more than one.
         // mergeAttrs: Merge attributes and child elements as properties of the parent, instead of keying attributes off a child attribute object.
         const parser = new Parser({ explicitArray: false, mergeAttrs: true });
         // parse to object
         const xmlObj = await parser.parseStringPromise(xmlStr);
-        // get response data
-        const response = xmlObj[EpsonXmlHttpClient.XML_ROOT][EpsonXmlHttpClient.XML_BODY][EpsonXmlHttpClient.XML_RESPONSE];
+        if (xmlObj && xmlObj[EpsonXmlHttpClient.XML_ROOT] && xmlObj[EpsonXmlHttpClient.XML_ROOT][EpsonXmlHttpClient.XML_BODY]) {
+            // get response data
+            response = xmlObj[EpsonXmlHttpClient.XML_ROOT][EpsonXmlHttpClient.XML_BODY][EpsonXmlHttpClient.XML_RESPONSE];
+        }
         return {
-            ok: response.success ? true : false,
-            body: response
+            ok: response && response.success ? true : false,
+            body: response || {}
         }
     }
 
