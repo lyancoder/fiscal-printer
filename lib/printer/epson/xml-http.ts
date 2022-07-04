@@ -8,6 +8,8 @@ export class EpsonXmlHttpClient extends FPrinter.Client {
 
     private static XML_ROOT = 's:Envelope';
     private static XML_BODY = 's:Body';
+    private static XML_RES_ROOT = 'soapenv:Envelope';
+    private static XML_RES_BODY = 'soapenv:Body';
     private static XML_RESPONSE = 'response';
     private static COMMAND_CODE = {
         [Fiscal.CommandCode.OPEN_DRAWER]: (printerCommand: xmlbuilder.XMLElement, command: Fiscal.Command) => {
@@ -176,9 +178,9 @@ export class EpsonXmlHttpClient extends FPrinter.Client {
         const parser = new Parser({ explicitArray: false, mergeAttrs: true });
         // parse to object
         const xmlObj = await parser.parseStringPromise(xmlStr);
-        if (xmlObj && xmlObj[EpsonXmlHttpClient.XML_ROOT] && xmlObj[EpsonXmlHttpClient.XML_ROOT][EpsonXmlHttpClient.XML_BODY]) {
+        if (xmlObj && xmlObj[EpsonXmlHttpClient.XML_RES_ROOT] && xmlObj[EpsonXmlHttpClient.XML_RES_ROOT][EpsonXmlHttpClient.XML_RES_BODY]) {
             // get response data
-            response = xmlObj[EpsonXmlHttpClient.XML_ROOT][EpsonXmlHttpClient.XML_BODY][EpsonXmlHttpClient.XML_RESPONSE];
+            response = xmlObj[EpsonXmlHttpClient.XML_RES_ROOT][EpsonXmlHttpClient.XML_RES_BODY][EpsonXmlHttpClient.XML_RESPONSE];
         }
         return {
             ok: response && response.success ? true : false,
