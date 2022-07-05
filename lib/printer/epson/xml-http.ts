@@ -183,7 +183,7 @@ export class EpsonXmlHttpClient extends FPrinter.Client {
             response = xmlObj[EpsonXmlHttpClient.XML_RES_ROOT][EpsonXmlHttpClient.XML_RES_BODY][EpsonXmlHttpClient.XML_RESPONSE];
         }
         return {
-            ok: response && response.success ? true : false,
+            ok: response && response.success === 'true' ? true : false,
             body: response || {}
         }
     }
