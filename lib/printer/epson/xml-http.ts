@@ -33,6 +33,14 @@ export class EpsonXmlHttpClient extends FPrinter.Client {
                 operator: command.data?.operator ?? 1
             });
         }, 
+        [Fiscal.CommandCode.GET_NATIVE_CODE_FUNCTION]: (printerCommand: xmlbuilder.XMLElement, command: Fiscal.Command) => {
+            printerCommand.ele('directIO', {
+                command: command.data?.command ?? '0000',
+                data: command.data?.operator ?? '01',
+                timeout: command.data?.timeout ?? '6000',
+                comment: command.data?.comment ?? ''
+            });
+        }, 
     }
 
     /**
@@ -360,6 +368,13 @@ export class EpsonXmlHttpClient extends FPrinter.Client {
                 code: receipt.lottery.code
             });
         }
+        // personalTaxCode
+        if (receipt.personalTaxCode) { 
+            printerFiscalReceipt.ele('printRecPersonalTaxId', {
+                operator: receipt.personalTaxCode.operator ?? 1,
+                taxCode: receipt.personalTaxCode.code || ''
+            });
+        }
         // payments
         if (receipt.payments && receipt.payments.length > 0) {
             for (const payment of receipt.payments) {
@@ -477,11 +492,6 @@ export class EpsonXmlHttpClient extends FPrinter.Client {
     private convertCommandToXmlDoc(...commands: Fiscal.Command[]): xmlbuilder.XMLDocument {
         const printerCommand = xmlbuilder.create(commands.length > 1 ? 'printerCommands' : 'printerCommand');
         for (const command of commands) {
-            // if (command.code === Fiscal.CommandCode.OPEN_DRAWER) {
-            //     printerCommand.ele('openDrawer', {
-            //         operator: command.data?.operator ?? 1
-            //     });
-            // }
             if (EpsonXmlHttpClient.COMMAND_CODE[command.code]) {
                 EpsonXmlHttpClient.COMMAND_CODE[command.code](printerCommand, command);
             }

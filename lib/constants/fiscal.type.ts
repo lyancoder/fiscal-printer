@@ -36,6 +36,7 @@ export namespace Fiscal {
         qrCode?: QrCode,
         graphicCoupon?: GraphicCoupon,
         openDrawer?: OpenDrawer,
+        personalTaxCode?: PersonTaxCode
     }
 
     export type Report = {
@@ -150,6 +151,11 @@ export namespace Fiscal {
         operator?: string,
     }
 
+    export type PersonTaxCode = {
+        code?: string;
+        operator?: string;
+    }
+
     // export type Logo = {
     //     location?: string,
     //     index?: string,
@@ -259,5 +265,6 @@ export namespace Fiscal {
         RESET_PRINTER,
         // SET_DATE,
         // SET_LOGO,
+        GET_NATIVE_CODE_FUNCTION
     }
 }

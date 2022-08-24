@@ -1,20 +1,21 @@
 {
     "name": "epson-fiscal-printer",
-    "author": "harvey7",
-    "version": "1.0.9",
+    "author": "lyancoder",
+    "version": "1.1.4",
     "description": "A typescript module for fiscal printers support.",
     "keywords": [
         "fiscal",
         "printer",
-        "fiscal printer"
+        "fiscal printer",
+        "epson fiscal printer"
     ],
-    "homepage": "https://github.com/HarveyQi7/fiscal-printer",
+    "homepage": "https://github.com/lyancoder/fiscal-printer",
     "repository": {
         "type": "git",
-        "url": "https://github.com/HarveyQi7/fiscal-printer.git"
+        "url": "https://github.com/lyancoder/fiscal-printer.git"
     },
     "bugs": {
-        "url": "https://github.com/HarveyQi7/fiscal-printer/issues"
+        "url": "https://github.com/lyancoder/fiscal-printer/issues"
     },
     "license": "MIT",
     "main": "./dist/lib/index.js",
