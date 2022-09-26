@@ -1,13 +1,16 @@
 {
     "name": "epson-fiscal-printer",
     "author": "lyancoder",
-    "version": "1.1.6",
+    "version": "1.1.7",
     "description": "A typescript module for fiscal printers support.",
     "keywords": [
         "fiscal",
         "printer",
         "fiscal printer",
-        "epson fiscal printer"
+        "epson fiscal printer",
+        "custom",
+        "custom protocol",
+        "custom fiscal printer"
     ],
     "homepage": "https://github.com/lyancoder/fiscal-printer",
     "repository": {
