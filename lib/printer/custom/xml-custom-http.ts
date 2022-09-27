@@ -3,7 +3,7 @@ import * as xmlbuilder from 'xmlbuilder';
 import { Parser } from 'xml2js';
 import { FPrinterCustom } from "../../constants/custom/fprinter.custom";
 import { CustomProtocol } from "../../constants/custom/custom.type";
-
+import { Headers, fetch, Response } from "cross-fetch";
 export class CustomXmlHttpClient extends FPrinterCustom.Client {
 
     private static XML_RESPONSE = 'response';
@@ -89,25 +89,44 @@ export class CustomXmlHttpClient extends FPrinterCustom.Client {
         let url = `http://${config.host}/xml/printer.htm`;
         // build xml string
         const xmlStr = this.parseRequest(xmlDoc);
-        const headers: {
-            'Content-Type': string;
-            authorization?: string;
-        } = {
-            'Content-Type': 'text/plain'
-        };
-        config.fiscalId && (headers.authorization = `Basic ${Buffer.from(`${config.fiscalId}:${config.fiscalId}`).toString('base64')}`);
-        // send
+        // const headers: {
+        //     'Content-Type': string;
+        //     authorization?: string;
+        // } = {
+        //     'Content-Type': 'text/plain'
+        // };
+        const headers = new Headers();
+        headers.append('Content-Type', 'text/plain');
+        headers.append('authorization', 'Basic ' + Buffer.from(config.fiscalId + ':' + config.fiscalId).toString('base64'));
+        // config.fiscalId && (headers.authorization = `Basic ${Buffer.from(config.fiscalId + ':' + config.fiscalId).toString('base64')}`);
+        // send	
         const resXmlStr: string = await new Promise((resolve, reject) => {
-            axios
-                .post(url, xmlStr, {
-                    headers
-                })
-                .then((res) => {
-                    resolve(res.data);
-                })
-                .catch((err) => {
-                    reject(err);
-                });
+            fetch(url, {
+                method: 'POST',
+                headers,
+                body: xmlStr
+            })
+            .then((response: Response) => {
+                return response.text();
+            })
+            .then(body => {
+                // console.log('Response:' + body);
+                resolve(body);
+            })
+            .catch(err => {
+                // console.log('Errore:' + err);
+                reject(err);
+            });
+            // axios
+            //     .post(url, xmlStr, {
+            //         headers
+            //     })
+            //     .then((res) => {
+            //         resolve(res.data);
+            //     })
+            //     .catch((err) => {
+            //         reject(err);
+            //     });
         });
         const response = await this.parseResponse(resXmlStr, isGetInfo);
         response.original = {
