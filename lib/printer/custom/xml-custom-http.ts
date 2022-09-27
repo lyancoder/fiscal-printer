@@ -8,6 +8,11 @@ export class CustomXmlHttpClient extends FPrinterCustom.Client {
 
     private static XML_RESPONSE = 'response';
     private static INFO_XML_RESPONSE = 'infoResp';
+    private static XML_HEADER = {
+        version: '1.0', 
+        encoding: 'utf8',
+        standalone: true,
+    };
     
     private static COMMAND_CODE = {
         [CustomProtocol.CommandCode.OPEN_DRAWER]: (printerCommand: xmlbuilder.XMLElement, command: CustomProtocol.Command) => {
@@ -118,7 +123,7 @@ export class CustomXmlHttpClient extends FPrinterCustom.Client {
 
     /**
      * Request Message Format:
-     * <?xml version="1.0" encoding="utf-8"?>
+     * <?xml version: '1.0', encoding: 'utf-8', standalone: 'yes'?>
      * <printerCommand>
      *  <queryPrinterStatus></queryPrinterStatus>
      * </printerCommand>
@@ -126,11 +131,6 @@ export class CustomXmlHttpClient extends FPrinterCustom.Client {
      * @returns 
      */
     private parseRequest(xmlDoc: xmlbuilder.XMLDocument): string {
-        // const reqXmlStr = xmlbuilder
-        //     .create(CustomXmlHttpClient.XML_ROOT, { version: '1.0', encoding: 'utf-8', standalone: true })
-        //     .ele(CustomXmlHttpClient.XML_BODY)
-        //     .importDocument(xmlDoc)
-        //     .end({ pretty: true });
         const reqXmlStr = xmlDoc.end({ pretty: true });
         return reqXmlStr;
     }
@@ -174,7 +174,7 @@ export class CustomXmlHttpClient extends FPrinterCustom.Client {
      */
     private convertReceiptToXmlDoc(receipt: CustomProtocol.Receipt): xmlbuilder.XMLDocument {
         // init
-        const printerFiscalReceipt = xmlbuilder.create('printerFiscalReceipt');
+        const printerFiscalReceipt = xmlbuilder.create('printerFiscalReceipt', CustomXmlHttpClient.XML_HEADER);
         // begin
         printerFiscalReceipt.ele('beginFiscalReceipt');
         // lottery
@@ -317,7 +317,7 @@ export class CustomXmlHttpClient extends FPrinterCustom.Client {
      * @returns 
      */
     private convertReportToXmlDoc(report: CustomProtocol.Report): xmlbuilder.XMLDocument {
-        const printerFiscalReport = xmlbuilder.create('printerFiscalReport');
+        const printerFiscalReport = xmlbuilder.create('printerFiscalReport', CustomXmlHttpClient.XML_HEADER);
         if (report.type === CustomProtocol.ReportType.DAILY_FINANCIAL_REPORT) {
             printerFiscalReport.ele('printXReport', {
                 operator: report.operator ?? 1
@@ -342,7 +342,7 @@ export class CustomXmlHttpClient extends FPrinterCustom.Client {
      * @returns 
      */
     private convertCancelToXmlDoc(cancel: CustomProtocol.Cancel): xmlbuilder.XMLDocument {
-        const printerFiscalReceipt = xmlbuilder.create('printerFiscalReceipt');
+        const printerFiscalReceipt = xmlbuilder.create('printerFiscalReceipt', CustomXmlHttpClient.XML_HEADER);
         printerFiscalReceipt.ele('printRecMessage', {
             operator: cancel.operator ?? 1,
             messageType: '4',
@@ -371,7 +371,7 @@ export class CustomXmlHttpClient extends FPrinterCustom.Client {
      * @returns 
      */
     private convertCommandToXmlDoc(...commands: CustomProtocol.Command[]): xmlbuilder.XMLDocument {
-        const printerCommand = xmlbuilder.create(commands.length > 1 ? 'printerCommands' : 'printerCommand');
+        const printerCommand = xmlbuilder.create(commands.length > 1 ? 'printerCommands' : 'printerCommand', CustomXmlHttpClient.XML_HEADER);
         for (const command of commands) {
             if (CustomXmlHttpClient.COMMAND_CODE[command.code]) {
                 CustomXmlHttpClient.COMMAND_CODE[command.code](printerCommand, command);
