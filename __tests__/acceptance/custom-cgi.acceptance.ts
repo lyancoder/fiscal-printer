@@ -26,7 +26,7 @@ describe('custom-cgi', () => {
                     res.type('text/xml').status(200).send(
                         `
                         <?xml version="1.0" encoding="utf-8"?>
-                            <response success="true" status="2">
+                            <response success="true" status="0">
                                 <addInfo>
                                     <elementList>lastCommand, dateTime, printerStatus, fpStatus, receiptStep, nClose, fiscalDoc</elementList>
                                     <lastCommand>74</lastCommand>
@@ -43,7 +43,7 @@ describe('custom-cgi', () => {
                 } else if (xmlObj['printerFiscalReport']) {
                     res.type('text/xml').status(200).send(
                         `<?xml version="1.0" encoding="utf-8"?>
-                            <response success="true" code="" status="2">
+                            <response success="true" status="0">
                                 <addInfo>
                                     <elementList>lastCommand,printerStatus,zRepNumber,dailyAmount</elementList>
                                     <lastCommand>74</lastCommand>
@@ -58,7 +58,7 @@ describe('custom-cgi', () => {
                     res.type('text/xml').status(200).send(
                         `
                             <?xml version="1.0" encoding="utf-8"?>
-                                <response success="true" status="x">
+                                <response success="true" status="0">
                                     <addInfo>
                                         <elementList>lastCommand,printerStatus</elementList>
                                         <lastCommand>74</lastCommand>
@@ -80,8 +80,8 @@ describe('custom-cgi', () => {
         server = app.listen(80);
 
         client = new CustomXmlHttpClient({
-            host: '127.0.0.1',
-            fiscalId: 'STMTE770228'
+            host: '192.168.1.97',
+            fiscalId: 'STMTE500271'
         });
     });
 
@@ -98,7 +98,7 @@ describe('custom-cgi', () => {
                     type: CustomProtocol.ItemType.HOLD,
                     description: 'B',
                     quantity: 2,
-                    unitPrice: 2.5
+                    unitPrice: 2
                 },
                 {
                     type: CustomProtocol.ItemType.HOLD,
@@ -107,12 +107,21 @@ describe('custom-cgi', () => {
                     unitPrice: 3
                 },
             ],
+            subtotals: [{
+                type: CustomProtocol.ItemType.HOLD
+            }],
             payments: [
                 {
                     description: 'Payment in cash',
-                    payment: 19
+                    payment: 18,
+                    paymentType: 1
                 }
-            ]
+            ],
+            personalTaxCode: {
+                message: 'RSSMRA00A01G337P',
+                messageType: '3',
+                font: 'B',
+            }
         });
         console.log(response);
         assert.ok(response.ok);
@@ -149,5 +158,4 @@ describe('custom-cgi', () => {
     after(() => {
         server.close();
     })
-
 })

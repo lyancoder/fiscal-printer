@@ -7,7 +7,7 @@ export namespace CustomProtocol {
     // *********************
 
     export type OpenDrawer = {
-        operator?: string,
+        operator?: string;
     }
 
     // *********************
@@ -15,38 +15,41 @@ export namespace CustomProtocol {
     // *********************
 
     export type Receipt = {
-        operator?: string,
-        sales?: Sale[],
-        lottery?: Lottery,
-        refunds?: Refund[],
-        subtotals?: Subtotal[],
-        payments?: Payment[],
-        barCode?: BarCode,
-        qrCode?: QrCode,
-        graphicCoupon?: GraphicCoupon,
-        openDrawer?: OpenDrawer,
-        personalTaxCode?: PersonTaxCode
+        operator?: string;
+        sales?: Sale[];
+        lottery?: Lottery;
+        refunds?: Refund[];
+        subtotals?: Subtotal[];
+        payments?: Payment[];
+        barCode?: BarCode;
+        qrCode?: QrCode;
+        graphicCoupon?: GraphicCoupon;
+        openDrawer?: OpenDrawer;
+        // customer ID
+        personalTaxCode?: Message;
+        beginDisplayText?: DisplayText;
+        endDisplayText?: DisplayText;
     }
 
     export type Report = {
-        type: ReportType,
-        operator?: string,
-        timeout?: number,
-        openDrawer?: OpenDrawer,
+        type: ReportType;
+        operator?: string;
+        timeout?: number;
+        openDrawer?: OpenDrawer;
     }
 
     export type Cancel = {
-        type: CancelType,
-        zRepNum: string,
-        docNum: string,
-        date: string,
-        fiscalNum: string,
-        operator?: string,
+        type: CancelType;
+        zRepNum: string;
+        docNum: string;
+        date: string;
+        fiscalNum: string;
+        operator?: string;
     }
 
     export type Command = {
-        code: CommandCode,
-        data?: AnyObj,
+        code: CommandCode;
+        data?: AnyObj;
     }
 
     // *********************
@@ -70,8 +73,46 @@ export namespace CustomProtocol {
         code: string;
     }
 
+    export type Message = {
+        /**
+         * Line of text to be printed (maximum 42 characters).
+         * The maximum lengths are set based on the "font" attribute.
+         * Additional characters are truncated.
+         */
+        message: string;
+        /**
+         * Type of line to print:
+         * 
+         * 1 = additional descriptive line (sales body)
+         * 2 = additional line in payments
+         * 3 = line issued after payment
+         * 4 = courtesy line
+        */
+        messageType: string;
+        /**
+         * Font type:
+         * 1 = normal
+         * 2 = bold
+         * 3 = 42 characters long
+         * 4 = double height
+         * 5 = double width
+         * 6 = italics
+         * 7 = length 42, double height
+         * 8 = length 42, bold
+         * 9 = length 42, bold, double height
+         * C = normal, used for printing the customer in the tax invoice
+         * P = normal, used to print the return receipt number in a credit note
+         * B = normal, used for printing the customer ID (Scontrino Parlante)
+         */
+        font: string;
+    }
+
+    export type DisplayText = {
+        data: string;
+    }
+
     export type Refund = {
-        type: ItemType,
+        type: ItemType;
     } & CommonSale;
 
     export type Subtotal = {
@@ -96,34 +137,33 @@ export namespace CustomProtocol {
     }
 
     export type GraphicCoupon = {
-        format?: string,
-        value?: string,
-        operator?: string,
-    }
-
-    export type PersonTaxCode = {
-        code?: string;
+        format?: string;
+        value?: string;
         operator?: string;
     }
 
+    export type PersonTaxCode = {
+        code: string;
+    }
+
     export type BarCode = {
-        position?: string,
-        width?: number,
-        height?: number,
-        hriPosition?: string,
-        hriFont?: string,
-        type?: string,
-        data: string,
-        operator?: string,
+        position?: string;
+        width?: number;
+        height?: number;
+        hriPosition?: string;
+        hriFont?: string;
+        type?: string;
+        data: string;
+        operator?: string;
     }
 
     export type QrCode = {
-        alignment?: string,
-        size?: number,
-        errorCorrection?: number,
-        type?: string,
-        data: string,
-        operator?: string,
+        alignment?: string;
+        size?: number;
+        errorCorrection?: number;
+        type?: string;
+        data: string;
+        operator?: string;
     }
 
     // *********************

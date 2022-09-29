@@ -318,6 +318,16 @@ export class EpsonXmlHttpClient extends FPrinter.Client {
                 }
             }
         }
+        // personalTaxCode
+        if (receipt.personalTaxCode) { 
+            const { message = '', messageType = Fiscal.MessageType.CUSTOMER_ID, index = 1 } = receipt.personalTaxCode;
+            printerFiscalReceipt.ele('printRecMessage', {
+                message,
+                messageType,
+                index,
+                operator: receipt.personalTaxCode.operator ?? 1,
+            });
+        }
         // subtotals
         if (receipt.subtotals && receipt.subtotals.length > 0) {
             for (const subtotal of receipt.subtotals) {
@@ -366,13 +376,6 @@ export class EpsonXmlHttpClient extends FPrinter.Client {
             printerFiscalReceipt.ele('printRecLotteryID', {
                 operator: receipt.lottery.operator ?? 1,
                 code: receipt.lottery.code
-            });
-        }
-        // personalTaxCode
-        if (receipt.personalTaxCode) { 
-            printerFiscalReceipt.ele('printRecPersonalTaxId', {
-                operator: receipt.personalTaxCode.operator ?? 1,
-                taxCode: receipt.personalTaxCode.code || ''
             });
         }
         // payments

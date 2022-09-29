@@ -3,7 +3,6 @@ import * as xmlbuilder from 'xmlbuilder';
 import { Parser } from 'xml2js';
 import { FPrinterCustom } from "../../constants/custom/fprinter.custom";
 import { CustomProtocol } from "../../constants/custom/custom.type";
-import { Headers, fetch, Response } from "cross-fetch";
 export class CustomXmlHttpClient extends FPrinterCustom.Client {
 
     private static XML_RESPONSE = 'response';
@@ -89,44 +88,22 @@ export class CustomXmlHttpClient extends FPrinterCustom.Client {
         let url = `http://${config.host}/xml/printer.htm`;
         // build xml string
         const xmlStr = this.parseRequest(xmlDoc);
-        // const headers: {
-        //     'Content-Type': string;
-        //     authorization?: string;
-        // } = {
-        //     'Content-Type': 'text/plain'
-        // };
-        const headers = new Headers();
-        headers.append('Content-Type', 'text/plain');
-        headers.append('authorization', 'Basic ' + Buffer.from(config.fiscalId + ':' + config.fiscalId).toString('base64'));
-        // config.fiscalId && (headers.authorization = `Basic ${Buffer.from(config.fiscalId + ':' + config.fiscalId).toString('base64')}`);
+        const headers = {
+            'Content-Type': 'text/plain',
+            'authorization': `Basic ${Buffer.from(`${config.fiscalId || ''}:${config.fiscalId || ''}`).toString('base64')}`
+        };
         // send	
         const resXmlStr: string = await new Promise((resolve, reject) => {
-            fetch(url, {
-                method: 'POST',
-                headers,
-                body: xmlStr
+            axios
+            .post(url, xmlStr, {
+                headers
             })
-            .then((response: Response) => {
-                return response.text();
+            .then((res) => {
+                resolve(res.data);
             })
-            .then(body => {
-                // console.log('Response:' + body);
-                resolve(body);
-            })
-            .catch(err => {
-                // console.log('Errore:' + err);
+            .catch((err) => {
                 reject(err);
             });
-            // axios
-            //     .post(url, xmlStr, {
-            //         headers
-            //     })
-            //     .then((res) => {
-            //         resolve(res.data);
-            //     })
-            //     .catch((err) => {
-            //         reject(err);
-            //     });
         });
         const response = await this.parseResponse(resXmlStr, isGetInfo);
         response.original = {
@@ -156,13 +133,16 @@ export class CustomXmlHttpClient extends FPrinterCustom.Client {
 
     /**
      * Response Message Format:
+     * success = "true" | "false"; status = if error return "error code", else return '0';
+     * 
      * <?xml version="1.0" encoding="utf-8"?>
-     *   <response success="" status=""> success : "true" | "false";  status: if error "error code" else 0;
+     *   <response success="" status=""> 
      *      <addInfo>
      *          ...
      *      </addInfo>
      *   </response>
      * @param xmlStr 
+     * @param isGetInfo if exce
      */
     private async parseResponse(xmlStr: string, isGetInfo?: boolean): Promise<FPrinterCustom.Response> {
         // create xml parser
@@ -196,13 +176,18 @@ export class CustomXmlHttpClient extends FPrinterCustom.Client {
         const printerFiscalReceipt = xmlbuilder.create('printerFiscalReceipt', CustomXmlHttpClient.XML_HEADER);
         // begin
         printerFiscalReceipt.ele('beginFiscalReceipt');
+        if (receipt.beginDisplayText) {
+            printerFiscalReceipt.ele('displayText', {
+                data: receipt.beginDisplayText.data || ''
+            });
+        }
         // lottery
         if (receipt.lottery) {
             printerFiscalReceipt.ele('setLotteryCode', {
                 code: receipt.lottery.code
             });
         }
-        // sales
+        // sales item
         if (receipt.sales && receipt.sales.length > 0) {
             for (const sale of receipt.sales) {
                 const commonSale: CustomProtocol.CommonSale = {
@@ -294,6 +279,15 @@ export class CustomXmlHttpClient extends FPrinterCustom.Client {
                 });
             }
         }
+        // personalTaxCode
+        if (receipt.personalTaxCode) {
+            const { message = '', messageType = '3', font = 'B' } = receipt.personalTaxCode;
+            printerFiscalReceipt.ele('printRecMessage', {
+                message,
+                messageType,
+                font
+            });
+        }
         // barCode
         if (receipt.barCode) {
             printerFiscalReceipt.ele('printBarCode', {
@@ -324,6 +318,11 @@ export class CustomXmlHttpClient extends FPrinterCustom.Client {
                 operator: receipt.graphicCoupon.operator ?? 1,
                 graphicFormat: receipt.graphicCoupon.format ?? 'B'
             }, receipt.graphicCoupon.value ?? '');
+        }
+        if (receipt.endDisplayText) {
+            printerFiscalReceipt.ele('displayText', {
+                data: receipt.endDisplayText.data || ''
+            });
         }
         // end
         printerFiscalReceipt.ele('endFiscalReceiptCut');

@@ -12,7 +12,7 @@ export namespace Fiscal {
     // }
 
     export type OpenDrawer = {
-        operator?: string,
+        operator?: string;
     }
 
     // export type Display = {
@@ -26,33 +26,33 @@ export namespace Fiscal {
     // *********************
 
     export type Receipt = {
-        operator?: string,
-        sales?: Sale[],
-        lottery?: Lottery,
-        refunds?: Refund[],
-        subtotals?: Subtotal[],
-        payments?: Payment[],
-        barCode?: BarCode,
-        qrCode?: QrCode,
-        graphicCoupon?: GraphicCoupon,
-        openDrawer?: OpenDrawer,
-        personalTaxCode?: PersonTaxCode
+        operator?: string;
+        sales?: Sale[];
+        lottery?: Lottery;
+        refunds?: Refund[];
+        subtotals?: Subtotal[];
+        payments?: Payment[];
+        barCode?: BarCode;
+        qrCode?: QrCode;
+        graphicCoupon?: GraphicCoupon;
+        openDrawer?: OpenDrawer;
+        personalTaxCode?: Message;
     }
 
     export type Report = {
-        type: ReportType,
-        operator?: string,
-        timeout?: number,
-        openDrawer?: OpenDrawer,
+        type: ReportType;
+        operator?: string;
+        timeout?: number;
+        openDrawer?: OpenDrawer;
     }
 
     export type Cancel = {
-        type: CancelType,
-        zRepNum: string,
-        docNum: string,
-        date: string,
-        fiscalNum: string,
-        operator?: string,
+        type: CancelType;
+        zRepNum: string;
+        docNum: string;
+        date: string;
+        fiscalNum: string;
+        operator?: string;
     }
 
     // export type NonFiscal = {
@@ -70,8 +70,8 @@ export namespace Fiscal {
     // } | Receipt
 
     export type Command = {
-        code: CommandCode,
-        data?: AnyObj,
+        code: CommandCode;
+        data?: AnyObj;
     }
 
     // *********************
@@ -79,57 +79,98 @@ export namespace Fiscal {
     // *********************
 
     export type Sale = {
-        type: ItemType,
-        operations?: Operation[],
-        operator?: string,
-        description?: string,
-        quantity: number,
-        unitPrice: number,
-        department?: string,
-        justification?: string,
+        type: ItemType;
+        operations?: Operation[];
+        operator?: string;
+        description?: string;
+        quantity: number;
+        unitPrice: number;
+        department?: string;
+        justification?: string;
     }
 
     export type Lottery = {
-        code: string,
-        operator?: string,
+        code: string;
+        operator?: string;
+    }
+
+    export type Message = {
+        /**
+         * represents the text to be printed or the customer ID. The maximum lengths are as follows:
+         * 
+         * Message type 4 = Max 38 (or 37 with invoices)
+         * Message type 7 = Max 46 (although native protocol limit is 64)
+         * Message type 8 = Not applicable. Attribute can be omitted
+         * All other message types = Max 46
+         */
+        message: string;
+        /**
+         * defines the row type to be printed:
+         * 1 = Additional header. This type must be placed before the beginFiscalReceipt sub-element
+         * 2 = Trailer (after NUMERO CONFEZIONI and before NUMERO CASSA)
+         * 3 = Additional trailer (promo lines after NUMERO CASSA and before barcode or QR code)
+         * 4 = Additional description (in the body of the commercial document or direct invoice)
+         * 7 = Customer Id. Sets CustomerId field in www/json_files/rec.json file(The font has no relevance so the attribute can be omitted)
+         * 8 = Print or erase all EFT-POS transaction lines
+         */
+        messageType: MessageType;
+        /**
+         * indicates the line number:
+         * 
+         * Range 1 to 9 for additional header (type 1)
+         * Range 1 to 99 for trailer and additional trailer descriptions (types 2 and 3)
+         * No meaning for additional row, Customer Id and EFT-POS transaction lines (types 4, 7 and 8)
+         * The attribute can be omitted
+         */
+        index?: number;
+        // attribute can be omitted when messageType is either 4, 7 or 8
+        font?: number;
+        /**
+         * attribute is only relevant when messageType is 8:
+         * 
+         * 0 = Print EFT-POS transaction lines
+         * 1 = Cancel EFT-POS transaction lines
+         */
+        clearEFTPOSBuffer?: number;
+        operator?: string;
     }
 
     export type Refund = {
-        type: ItemType,
-        optType?: string,
-        operation?: Operation,
-        operator?: string,
-        quantity?: number,
-        unitPrice?: number,
-        amount?: number,
-        description?: string,
-        department?: string,
-        justification?: string,
+        type: ItemType;
+        optType?: string;
+        operation?: Operation;
+        operator?: string;
+        quantity?: number;
+        unitPrice?: number;
+        amount?: number;
+        description?: string;
+        department?: string;
+        justification?: string;
     }
 
     export type Subtotal = {
-        type: ItemType,
-        option?: SubtotalOpt,
-        operations?: Operation[],
-        operator?: string,
+        type: ItemType;
+        option?: SubtotalOpt;
+        operations?: Operation[];
+        operator?: string;
     }
 
     export type Payment = {
-        paymentType?: PaymentType,
-        index?: string,
-        operator?: string,
-        description?: string,
-        payment?: number,
-        justification?: string,
+        paymentType?: PaymentType;
+        index?: string;
+        operator?: string;
+        description?: string;
+        payment?: number;
+        justification?: string;
     }
 
     export type Operation = {
-        type: OperationType,
-        operator?: string,
-        amount: number,
-        description?: string,
-        department?: string,
-        justification?: string,
+        type: OperationType;
+        operator?: string;
+        amount: number;
+        description?: string;
+        department?: string;
+        justification?: string;
     }
 
     // export type Message = {
@@ -146,9 +187,9 @@ export namespace Fiscal {
     // }
 
     export type GraphicCoupon = {
-        format?: string,
-        value?: string,
-        operator?: string,
+        format?: string;
+        value?: string;
+        operator?: string;
     }
 
     export type PersonTaxCode = {
@@ -166,23 +207,23 @@ export namespace Fiscal {
     // }
 
     export type BarCode = {
-        position?: string,
-        width?: number,
-        height?: number,
-        hriPosition?: string,
-        hriFont?: string,
-        type?: string,
-        data: string,
-        operator?: string,
+        position?: string;
+        width?: number;
+        height?: number;
+        hriPosition?: string;
+        hriFont?: string;
+        type?: string;
+        data: string;
+        operator?: string;
     }
 
     export type QrCode = {
-        alignment?: string,
-        size?: number,
-        errorCorrection?: number,
-        type?: string,
-        data: string,
-        operator?: string,
+        alignment?: string;
+        size?: number;
+        errorCorrection?: number;
+        type?: string;
+        data: string;
+        operator?: string;
     }
 
     // *********************
@@ -205,15 +246,14 @@ export namespace Fiscal {
         VOID = 'VOID'
     }
 
-    // export enum MessageType {
-    //     ADDITIONAL_HEADER,
-    //     TRAILER,
-    //     ADDITIONAL_TRAILER,
-    //     ADDITIONAL_DESC,
-    //     CUSTOMER_ID,
-    //     PRINT_EFTPOS_TRANS_LINE,
-    //     ERASE_EFTPOS_TRANS_LINE,
-    // }
+    export enum MessageType {
+        ADDITIONAL_HEADER = 1,
+        TRAILER = 2,
+        ADDITIONAL_TRAILER = 3,
+        ADDITIONAL_DESC = 4,
+        CUSTOMER_ID = 7,
+        PRINT_OR_ERASE_EFTPOS_TRANS_LINE = 8
+    }
 
     export enum OperationType {
         DISCOUNT_SALE,

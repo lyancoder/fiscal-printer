@@ -1,7 +1,7 @@
 {
     "name": "epson-fiscal-printer",
     "author": "lyancoder",
-    "version": "1.1.9",
+    "version": "1.1.10",
     "description": "A typescript module for fiscal printers support.",
     "keywords": [
         "fiscal",
@@ -33,7 +33,6 @@
     },
     "dependencies": {
         "axios": "^0.27.2",
-        "cross-fetch": "^3.1.5",
         "xml2js": "^0.4.23",
         "xmlbuilder": "^15.1.1"
     },
