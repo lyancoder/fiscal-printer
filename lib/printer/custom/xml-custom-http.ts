@@ -182,7 +182,7 @@ export class CustomXmlHttpClient extends FPrinterCustom.Client {
             });
         }
         // lottery
-        if (receipt.lottery) {
+        if (receipt.lottery && receipt.lottery.code) {
             printerFiscalReceipt.ele('setLotteryCode', {
                 code: receipt.lottery.code
             });
@@ -363,7 +363,7 @@ export class CustomXmlHttpClient extends FPrinterCustom.Client {
         const printerFiscalReceipt = xmlbuilder.create('printerFiscalReceipt', CustomXmlHttpClient.XML_HEADER);
         const commonLabel: CustomProtocol.Cancel = {
             docRefZ: cancel.docRefZ || '',
-            docRefNumber: cancel.docRefZ || '',
+            docRefNumber: cancel.docRefNumber || '',
             docDate: cancel.docDate || '',
             checkOnly: cancel.checkOnly ?? CustomProtocol.EnableType.ABLE, 
             codLottery: cancel.codLottery || ''

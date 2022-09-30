@@ -45,7 +45,7 @@ export namespace CustomProtocol {
         printPreview?: EnableType;
         fiscalSerial?: string;
         checkOnly?: EnableType;
-        codLottery: string;
+        codLottery?: string;
         cancelRecItems?: CommonSale[];
     }
 
