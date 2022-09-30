@@ -39,12 +39,14 @@ export namespace CustomProtocol {
     }
 
     export type Cancel = {
-        type: CancelType;
-        zRepNum: string;
-        docNum: string;
-        date: string;
-        fiscalNum: string;
-        operator?: string;
+        docRefZ: string;
+        docRefNumber: string;
+        docDate: string;
+        printPreview?: EnableType;
+        fiscalSerial?: string;
+        checkOnly?: EnableType;
+        codLottery: string;
+        cancelRecItems?: CommonSale[];
     }
 
     export type Command = {
@@ -173,6 +175,11 @@ export namespace CustomProtocol {
     export enum ItemType {
         HOLD,
         CANCEL
+    }
+
+    export enum EnableType {
+        DISABLE,   
+        ABLE
     }
 
     export enum ReportType {

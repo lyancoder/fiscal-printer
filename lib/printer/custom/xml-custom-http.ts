@@ -361,11 +361,33 @@ export class CustomXmlHttpClient extends FPrinterCustom.Client {
      */
     private convertCancelToXmlDoc(cancel: CustomProtocol.Cancel): xmlbuilder.XMLDocument {
         const printerFiscalReceipt = xmlbuilder.create('printerFiscalReceipt', CustomXmlHttpClient.XML_HEADER);
-        printerFiscalReceipt.ele('printRecMessage', {
-            operator: cancel.operator ?? 1,
-            messageType: '4',
-            message: `${cancel.type} ${cancel.zRepNum} ${cancel.docNum} ${cancel.date} ${cancel.fiscalNum}`
-        });
+        const commonLabel: CustomProtocol.Cancel = {
+            docRefZ: cancel.docRefZ || '',
+            docRefNumber: cancel.docRefZ || '',
+            docDate: cancel.docDate || '',
+            checkOnly: cancel.checkOnly ?? CustomProtocol.EnableType.ABLE, 
+            codLottery: cancel.codLottery || ''
+        };
+
+        cancel.printPreview && (commonLabel.printPreview = cancel.printPreview);
+        cancel.fiscalSerial && (commonLabel.fiscalSerial = cancel.fiscalSerial);
+        // Return feasibility check
+        if (cancel.checkOnly === CustomProtocol.EnableType.ABLE) {
+            printerFiscalReceipt.ele('beginRtDocRefund', commonLabel);
+        } else {
+            // Execution of return document
+            printerFiscalReceipt.ele('beginRtDocRefund', commonLabel);
+            if (Array.isArray(cancel.cancelRecItems) && cancel.cancelRecItems.length) {
+                for (let recItem of cancel.cancelRecItems) {
+                    printerFiscalReceipt.ele('printRecItem', {
+                        description: recItem.description || '',
+                        quantity: recItem.quantity || 1,
+                        unitPrice: recItem.unitPrice ?? 0,
+                        department: recItem.department ?? 1,
+                    });
+                }
+            }
+        }
         return printerFiscalReceipt;
     }
 

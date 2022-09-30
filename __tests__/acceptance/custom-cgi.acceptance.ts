@@ -127,15 +127,37 @@ describe('custom-cgi', () => {
         assert.ok(response.ok);
     })
 
-    it('Cancel Fiscal Report', async () => {
+    it('Cancel feasibility check', async () => {
         const response = await client.printCancel({
-            type: CustomProtocol.CancelType.VOID,
-            zRepNum: '0134',
-            docNum: '0001',
-            date: '01012022',
-            fiscalNum: '11111111111'
+            docRefZ: '',
+            docRefNumber: '',
+            docDate: '',
+            printPreview: CustomProtocol.EnableType.DISABLE,
+            fiscalSerial: 'STMTE500271',
+            checkOnly: CustomProtocol.EnableType.ABLE,
+            codLottery: '',
         });
-        console.log(response);
+        console.log(response, 'Cancel feasibility check');
+        assert.ok(response.ok);
+    })
+
+    it('Execution of Cancel document', async () => {
+        const response = await client.printCancel({
+            docRefZ: '',
+            docRefNumber: '',
+            docDate: '',
+            printPreview: CustomProtocol.EnableType.DISABLE,
+            fiscalSerial: 'STMTE500271',
+            checkOnly: CustomProtocol.EnableType.DISABLE,
+            codLottery: '',
+            cancelRecItems: [{
+                description: 'cancel dish1',
+                quantity: 3,
+                unitPrice: 3, 
+                department: 1
+            }]
+        });
+        console.log(response, 'Execution of Cancel document');
         assert.ok(response.ok);
     })
 
