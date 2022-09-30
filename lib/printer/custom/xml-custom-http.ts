@@ -366,11 +366,11 @@ export class CustomXmlHttpClient extends FPrinterCustom.Client {
             docRefNumber: cancel.docRefNumber || '',
             docDate: cancel.docDate || '',
             checkOnly: cancel.checkOnly ?? CustomProtocol.EnableType.ABLE, 
-            codLottery: cancel.codLottery || ''
         };
 
         cancel.printPreview && (commonLabel.printPreview = cancel.printPreview);
         cancel.fiscalSerial && (commonLabel.fiscalSerial = cancel.fiscalSerial);
+        cancel.codLottery && (commonLabel.codLottery = cancel.codLottery);
         // Return feasibility check
         if (cancel.checkOnly === CustomProtocol.EnableType.ABLE) {
             printerFiscalReceipt.ele('beginRtDocRefund', commonLabel);
