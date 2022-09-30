@@ -373,10 +373,10 @@ export class CustomXmlHttpClient extends FPrinterCustom.Client {
         cancel.codLottery && (commonLabel.codLottery = cancel.codLottery);
         // Return feasibility check
         if (cancel.checkOnly === CustomProtocol.EnableType.ABLE) {
-            printerFiscalReceipt.ele('beginRtDocRefund', commonLabel);
+            printerFiscalReceipt.ele('beginRtDocAnnulment', commonLabel);
         } else {
             // Execution of return document
-            printerFiscalReceipt.ele('beginRtDocRefund', commonLabel);
+            printerFiscalReceipt.ele('beginRtDocAnnulment', commonLabel);
             if (Array.isArray(cancel.cancelRecItems) && cancel.cancelRecItems.length) {
                 for (let recItem of cancel.cancelRecItems) {
                     printerFiscalReceipt.ele('printRecItem', {
