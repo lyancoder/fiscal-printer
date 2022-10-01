@@ -159,7 +159,7 @@ await fprinter.printFiscalReceipt({
 await fprinter.printCancel({
     docRefZ: '0021',
     docRefNumber: '0034',
-    docDate: 'DDMMYY',
+    docDate: '011022', // DDMMYY
     printPreview: CustomProtocol.EnableType.DISABLE,
     fiscalSerial: 'STMTE500432',
     checkOnly: CustomProtocol.EnableType.ABLE, 
@@ -170,7 +170,7 @@ await fprinter.printCancel({
 await fprinter.printCancel({
     docRefZ: '0021',
     docRefNumber: '0034',
-    docDate: 'DDMMYY',
+    docDate: '011022', // DDMMYY,
     printPreview: CustomProtocol.EnableType.DISABLE,
     fiscalSerial: 'STMTE500432',
     checkOnly: CustomProtocol.EnableType.DISABLE,
