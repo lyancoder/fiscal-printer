@@ -60,10 +60,10 @@ In order to easily interface with different brands of fiscal printers and use th
 ### Interfaces
 | Epson | Custom |
 | --- | --- |
-| `printFiscalReceipt(receipt: Fiscal.Receipt)` |  |
-| `printFiscalReport(report: Fiscal.Report)` |  |
-| `printCancel(cancel: Fiscal.Cancel)` | |
-| `executeCommand(...commands: Fiscal.Command[])` | |
+| `printFiscalReceipt(receipt: Fiscal.Receipt)` | `printFiscalReceipt(receipt: FPrinterCustom.Receipt)` |
+| `printFiscalReport(report: Fiscal.Report)` | `printFiscalReport(report: FPrinterCustom.Report)` |
+| `printCancel(cancel: Fiscal.Cancel)` | `printCancel(cancel: FPrinterCustom.Cancel)` |
+| `executeCommand(...commands: Fiscal.Command[])` | `executeCommand(...commands: FPrinterCustom.Command[])` |
 
 ### Usage
 
@@ -114,17 +114,17 @@ await client.printFiscalReport({
 ```
 
 - Custom Protocol Examples 
-- `Note: unit quantity multiplied by 1000, unit price multiplied by 1000, included the discount, payment`
+- `Note: unit quantity multiplied by 1000, unit price multiplied by 1000, include the discount, payment`
 
 ```typescript
 // Create a client
-const fprinter: FPrinter.Client = new CustomXmlHttpClient({
+const fprinter: FPrinterCustom.Client = new CustomXmlHttpClient({
     host: '192.168.1.1',
-    fiscalId: 'XXXXXXXXXXX', // 11 digits
+    fiscalId: 'STMTE500432', // 11 digits
 });
 
 // Fiscal receipt
-await client.printFiscalReceipt({
+await fprinter.printFiscalReceipt({
     sales: [
         {
             type: Fiscal.ItemType.HOLD,
@@ -148,18 +148,42 @@ await client.printFiscalReceipt({
     payments: [
         {
             description: 'Payment in cash',
-            payment: 19 * 100
+            payment: 19 * 100,
+            paymentType: 1
         }
     ]
 });
 
+// Fiscal Refund
+// step 1 request to make sure the annulment is possible, if responseBuf === 1 then execute step 2 
+await fprinter.printCancel({
+    docRefZ: '0021',
+    docRefNumber: '0034',
+    docDate: 'DDMMYY',
+    printPreview: CustomProtocol.EnableType.DISABLE,
+    fiscalSerial: 'STMTE500432',
+    checkOnly: CustomProtocol.EnableType.ABLE, 
+    codLottery: 'ASDSFES7',
+});
+
+// step 2 to proceed with the actual void request
+await fprinter.printCancel({
+    docRefZ: '0021',
+    docRefNumber: '0034',
+    docDate: 'DDMMYY',
+    printPreview: CustomProtocol.EnableType.DISABLE,
+    fiscalSerial: 'STMTE500432',
+    checkOnly: CustomProtocol.EnableType.DISABLE,
+    codLottery: 'ASDSFES7',
+});
+
 // Fiscal Report
-await client.printFiscalReport({
+await fprinter.printFiscalReport({
     type: Fiscal.ReportType.DAILY_FISCAL_CLOUSE,
 });
 
 // Fiscal Command
-await client.executeCommand({
+await fprinter.executeCommand({
     code: CustomProtocol.CommandCode.OPEN_DRAWER
 });
 ```
