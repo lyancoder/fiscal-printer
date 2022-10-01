@@ -46,6 +46,17 @@ In order to easily interface with different brands of fiscal printers and use th
 | code | command type |
 | data | data required by the command |
 
+#### Commands
+
+| Command | Desc | Support
+| --- | --- | --- |
+| OPEN_DRAWER | value: 0, open drawer | Epson / Custom |
+| QUERY_PRINTER_STATUS | value 1, query printer status | Epson / Custom |
+| RESET_PRINTER | value 2, reset printer | Epson / Custom |
+| GET_NATIVE_CODE_FUNCTION | value 3, use printer native code command | Epson / Custom |
+| GET_INFO | value 4, get printer device info | Custom Only |
+
+
 ### Interfaces
 
 - `printFiscalReceipt(receipt: Fiscal.Receipt)`
@@ -105,6 +116,6 @@ await client.printFiscalReport({
 ```
 
 ### Implemented
-| Epson |
-| --- |
-| Fiscal ePOS-Print XML |
+| Epson | Custom
+| --- | --- |
+| Fiscal ePOS-Print XML | |
