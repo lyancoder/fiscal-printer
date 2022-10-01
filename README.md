@@ -58,14 +58,12 @@ In order to easily interface with different brands of fiscal printers and use th
 
 
 ### Interfaces
-
-- `printFiscalReceipt(receipt: Fiscal.Receipt)`
-
-- `printFiscalReport(report: Fiscal.Report)`
-
-- `printCancel(cancel: Fiscal.Cancel)`
-
-- `executeCommand(...commands: Fiscal.Command[])`
+| Epson | Custom |
+| --- | --- |
+| `printFiscalReceipt(receipt: Fiscal.Receipt)` |  |
+| `printFiscalReport(report: Fiscal.Report)` |  |
+| `printCancel(cancel: Fiscal.Cancel)` | |
+| `executeCommand(...commands: Fiscal.Command[])` | |
 
 ### Usage
 
