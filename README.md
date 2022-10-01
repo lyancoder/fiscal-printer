@@ -10,6 +10,7 @@ In order to easily interface with different brands of fiscal printers and use th
 | operator | to identify the operator |
 | sales | sale items or cancel sale items |
 | lottery | national lottery unique customer code |
+| personalTaxCode | 
 | refunds | refund items or cancel refunds |
 | subtotals |  |
 | payments |  |
