@@ -179,7 +179,7 @@ await fprinter.printCancel({
 
 // Fiscal Report
 await fprinter.printFiscalReport({
-    type: Fiscal.ReportType.DAILY_FISCAL_CLOUSE,
+    type: CustomProtocol.ReportType.DAILY_FISCAL_CLOUSE,
 });
 
 // Fiscal Command
