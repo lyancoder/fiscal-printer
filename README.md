@@ -10,6 +10,7 @@ In order to easily interface with different brands of fiscal printers and use th
 | operator | to identify the operator |
 | sales | sale items or cancel sale items |
 | lottery | national lottery unique customer code |
+| personalTaxCode | 
 | refunds | refund items or cancel refunds |
 | subtotals |  |
 | payments |  |
@@ -45,15 +46,24 @@ In order to easily interface with different brands of fiscal printers and use th
 | code | command type |
 | data | data required by the command |
 
+#### Commands
+
+| Command | Desc | Support
+| --- | --- | --- |
+| OPEN_DRAWER | value: 0, open drawer | Epson / Custom |
+| QUERY_PRINTER_STATUS | value 1, query printer status | Epson / Custom |
+| RESET_PRINTER | value 2, reset printer | Epson / Custom |
+| GET_NATIVE_CODE_FUNCTION | value 3, use printer native code command | Epson / Custom |
+| GET_INFO | value 4, get printer device info | Custom Only |
+
+
 ### Interfaces
-
-- `printFiscalReceipt(receipt: Fiscal.Receipt)`
-
-- `printFiscalReport(report: Fiscal.Report)`
-
-- `printCancel(cancel: Fiscal.Cancel)`
-
-- `executeCommand(...commands: Fiscal.Command[])`
+| Epson | Custom |
+| --- | --- |
+| `printFiscalReceipt(receipt: Fiscal.Receipt)` | `printFiscalReceipt(receipt: FPrinterCustom.Receipt)` |
+| `printFiscalReport(report: Fiscal.Report)` | `printFiscalReport(report: FPrinterCustom.Report)` |
+| `printCancel(cancel: Fiscal.Cancel)` | `printCancel(cancel: FPrinterCustom.Cancel)` |
+| `executeCommand(...commands: Fiscal.Command[])` | `executeCommand(...commands: FPrinterCustom.Command[])` |
 
 ### Usage
 
@@ -103,7 +113,82 @@ await client.printFiscalReport({
 });
 ```
 
+- Custom Protocol Examples 
+- `Note: unit quantity multiplied by 1000, unit price multiplied by 1000, include the discount, payment`
+
+```typescript
+// Create a client
+const fprinter: FPrinterCustom.Client = new CustomXmlHttpClient({
+    host: '192.168.1.1',
+    fiscalId: 'STMTE500432', // 11 digits
+});
+
+// Fiscal receipt
+await fprinter.printFiscalReceipt({
+    sales: [
+        {
+            type: Fiscal.ItemType.HOLD,
+            description: 'A',
+            quantity: 1 * 1000,
+            unitPrice: 5 * 100
+        },
+        {
+            type: Fiscal.ItemType.HOLD,
+            description: 'B',
+            quantity: 2 * 1000,
+            unitPrice: 2.5 * 100
+        },
+        {
+            type: Fiscal.ItemType.HOLD,
+            description: 'C',
+            quantity: 3 * 1000,
+            unitPrice: 3 * 100
+        },
+    ],
+    payments: [
+        {
+            description: 'Payment in cash',
+            payment: 19 * 100,
+            paymentType: 1
+        }
+    ]
+});
+
+// Fiscal Refund
+// step 1 request to make sure the annulment is possible, if responseBuf === 1 then execute step 2 
+await fprinter.printCancel({
+    docRefZ: '0021',
+    docRefNumber: '0034',
+    docDate: '011022', // DDMMYY
+    printPreview: CustomProtocol.EnableType.DISABLE,
+    fiscalSerial: 'STMTE500432',
+    checkOnly: CustomProtocol.EnableType.ABLE, 
+    codLottery: 'ASDSFES7',
+});
+
+// step 2 to proceed with the actual void request
+await fprinter.printCancel({
+    docRefZ: '0021',
+    docRefNumber: '0034',
+    docDate: '011022', // DDMMYY,
+    printPreview: CustomProtocol.EnableType.DISABLE,
+    fiscalSerial: 'STMTE500432',
+    checkOnly: CustomProtocol.EnableType.DISABLE,
+    codLottery: 'ASDSFES7',
+});
+
+// Fiscal Report
+await fprinter.printFiscalReport({
+    type: CustomProtocol.ReportType.DAILY_FISCAL_CLOUSE,
+});
+
+// Fiscal Command
+await fprinter.executeCommand({
+    code: CustomProtocol.CommandCode.OPEN_DRAWER
+});
+```
+
 ### Implemented
-| Epson |
-| --- |
-| Fiscal ePOS-Print XML |
+| Epson | Custom
+| --- | --- |
+| Fiscal ePOS-Print XML | |
