@@ -244,6 +244,15 @@ export class CustomXmlHttpClient extends FPrinterCustom.Client {
                 }
             }
         }
+        // personalTaxCode
+        if (receipt.personalTaxCode) {
+            const { message = '', messageType = '3', font = 'B' } = receipt.personalTaxCode;
+            printerFiscalReceipt.ele('printRecMessage', {
+                message,
+                messageType,
+                font
+            });
+        }
         // subtotals
         if (receipt.subtotals && receipt.subtotals.length > 0) {
             for (const subtotal of receipt.subtotals) {
@@ -280,14 +289,14 @@ export class CustomXmlHttpClient extends FPrinterCustom.Client {
             }
         }
         // personalTaxCode
-        if (receipt.personalTaxCode) {
-            const { message = '', messageType = '3', font = 'B' } = receipt.personalTaxCode;
-            printerFiscalReceipt.ele('printRecMessage', {
-                message,
-                messageType,
-                font
-            });
-        }
+        // if (receipt.personalTaxCode) {
+        //     const { message = '', messageType = '3', font = 'B' } = receipt.personalTaxCode;
+        //     printerFiscalReceipt.ele('printRecMessage', {
+        //         message,
+        //         messageType,
+        //         font
+        //     });
+        // }
         // barCode
         if (receipt.barCode) {
             printerFiscalReceipt.ele('printBarCode', {
