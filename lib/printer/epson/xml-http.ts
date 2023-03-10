@@ -41,6 +41,12 @@ export class EpsonXmlHttpClient extends FPrinter.Client {
                 comment: command.data?.comment ?? ''
             });
         }, 
+        [Fiscal.CommandCode.DISPLAY_TEXT]: (printerCommand: xmlbuilder.XMLElement, command: Fiscal.Command) => {
+            printerCommand.ele('displayText', {
+                operator: command.data?.operator ?? 1,
+                data: command.data?.text ?? ''
+            });
+        }, 
     }
 
     /**

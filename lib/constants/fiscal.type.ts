@@ -305,6 +305,7 @@ export namespace Fiscal {
         RESET_PRINTER,
         // SET_DATE,
         // SET_LOGO,
-        GET_NATIVE_CODE_FUNCTION
+        GET_NATIVE_CODE_FUNCTION,
+        DISPLAY_TEXT
     }
 }

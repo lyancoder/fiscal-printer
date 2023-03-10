@@ -33,6 +33,11 @@ export class CustomXmlHttpClient extends FPrinterCustom.Client {
         }, 
         [CustomProtocol.CommandCode.GET_INFO]: (printerCommand: xmlbuilder.XMLElement, command: CustomProtocol.Command) => {
             printerCommand.ele('getInfo');
+        },
+        [CustomProtocol.CommandCode.DISPLAY_TEXT]: (printerCommand: xmlbuilder.XMLElement, command: CustomProtocol.Command) => {
+            printerCommand.ele('displayText', {
+                data: command.data?.text ?? '',
+            });
         }
     }
 

@@ -219,6 +219,7 @@ export namespace CustomProtocol {
         QUERY_PRINTER_STATUS,
         RESET_PRINTER,
         GET_NATIVE_CODE_FUNCTION,
-        GET_INFO
+        GET_INFO,
+        DISPLAY_TEXT
     }
 }
