@@ -53,7 +53,7 @@ export class EpsonXmlHttpClient extends FPrinter.Client {
                 dataType: command.data?.dataType ?? Fiscal.DataType.COMMERCIAL_DOCS,
                 day: command.data?.day || '',
                 month: command.data?.month || '',
-                year: command.data?.month || '',
+                year: command.data?.year || '',
                 fromNumber: command.data?.fromNumber || '',
                 toNumber: command.data?.toNumber || '',
             });
