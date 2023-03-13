@@ -306,6 +306,16 @@ export namespace Fiscal {
         // SET_DATE,
         // SET_LOGO,
         GET_NATIVE_CODE_FUNCTION,
-        DISPLAY_TEXT
+        DISPLAY_TEXT,
+        PRINT_CONTENT_BY_NUMBERS,
+    }
+
+    // indicates the type of data to collect:
+    export enum DataType {
+        ALL,
+        COMMERCIAL_DOCS,
+        INVOICES,
+        BOX_OFFICE_TICKETS,
+        OBSOLETE,
     }
 }

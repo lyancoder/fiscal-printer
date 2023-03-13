@@ -47,6 +47,17 @@ export class EpsonXmlHttpClient extends FPrinter.Client {
                 data: command.data?.text ?? ''
             });
         }, 
+        [Fiscal.CommandCode.PRINT_CONTENT_BY_NUMBERS]: (printerCommand: xmlbuilder.XMLElement, command: Fiscal.Command) => {
+            printerCommand.ele('printContentByNumbers', {
+                operator: command.data?.operator ?? 1,
+                dataType: command.data?.dataType ?? Fiscal.DataType.COMMERCIAL_DOCS,
+                day: command.data?.day || '',
+                month: command.data?.month || '',
+                year: command.data?.month || '',
+                fromNumber: command.data?.fromNumber || '',
+                toNumber: command.data?.toNumber || '',
+            });
+        }
     }
 
     /**
