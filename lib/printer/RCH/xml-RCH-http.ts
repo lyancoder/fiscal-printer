@@ -105,7 +105,7 @@ export class RCHXmlHttpClient extends FPrinterRCH.Client {
             response = xmlObj[RCHXmlHttpClient.XML_ROOT][RCHXmlHttpClient.XML_REQ];
         }
         return {
-            ok: response && response.errorCode === 0,
+            ok: response && response.errorCode === '0',
             body: response || {}
         }
     }
