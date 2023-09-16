@@ -102,10 +102,10 @@ export class RCHXmlHttpClient extends FPrinterRCH.Client {
         const xmlObj = await parser.parseStringPromise(xmlStr);
         if (xmlObj && Object.keys(xmlObj).length) {
             // get response data
-            response = xmlObj[RCHXmlHttpClient.XML_ROOT][RCHXmlHttpClient.XML_REQ];
+            response = xmlObj[RCHXmlHttpClient.XML_ROOT];
         }
         return {
-            ok: response && response.errorCode === '0',
+            ok: !!response && response[RCHXmlHttpClient.XML_REQ] && response[RCHXmlHttpClient.XML_REQ].errorCode === '0',
             body: response || {}
         }
     }
