@@ -58,12 +58,13 @@ In order to easily interface with different brands of fiscal printers and use th
 
 
 ### Interfaces
-| Epson | Custom |
-| --- | --- |
+| Epson | Custom | RCH |
+| --- | --- | --- |
 | `printFiscalReceipt(receipt: Fiscal.Receipt)` | `printFiscalReceipt(receipt: FPrinterCustom.Receipt)` |
 | `printFiscalReport(report: Fiscal.Report)` | `printFiscalReport(report: FPrinterCustom.Report)` |
 | `printCancel(cancel: Fiscal.Cancel)` | `printCancel(cancel: FPrinterCustom.Cancel)` |
-| `executeCommand(...commands: Fiscal.Command[])` | `executeCommand(...commands: FPrinterCustom.Command[])` |
+| `executeCommand(...commands: Fiscal.Command[])` | `executeCommand(...commands: FPrinterCustom.Command[])` |`executeCommand(commands: RCHProtocol.Commands)` |
+ 
 
 ### Usage
 
@@ -186,6 +187,33 @@ await fprinter.printFiscalReport({
 await fprinter.executeCommand({
     code: CustomProtocol.CommandCode.OPEN_DRAWER
 });
+```
+- RCH Protocol Examples
+```typescript
+    // init instance
+    const rchInstance = new RCHXmlHttpClient({
+        host: '192.168.1.99',
+    });
+    // exec sale item command
+    const response = await rchInstance.executeCommand([
+        '=R1/$200/(DOLCE)',
+        '=R2/$100/*2/(CAFFE)',
+        '=T1'
+    ]);
+    // get fiscal status command
+    const getStatus = await rchInstance.executeCommand([
+        '</?i/*4',
+    ]); 
+    /**
+     * refund
+     * 180923: DDMMYY
+     * 27: lastZ + 1
+     * 16: lastDocF
+    */
+    const getStatus = await rchInstance.executeCommand([
+        `=k/&180923/[27/]16`
+    ]);
+   
 ```
 
 ### Implemented
