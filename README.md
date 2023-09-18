@@ -189,6 +189,6 @@ await fprinter.executeCommand({
 ```
 
 ### Implemented
-| Epson | Custom
-| --- | --- |
-| Fiscal ePOS-Print XML | |
+| Epson | Custom | RCH
+| --- | --- | --- |
+| Fiscal ePOS-Print XML | | | 
