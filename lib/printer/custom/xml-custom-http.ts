@@ -3,6 +3,12 @@ import * as xmlbuilder from 'xmlbuilder';
 import { Parser } from 'xml2js';
 import { FPrinterCustom } from "../../constants/custom/fprinter.custom";
 import { CustomProtocol } from "../../constants/custom/custom.type";
+import process from 'process';
+
+delete process.env['http_proxy'];
+delete process.env['HTTP_PROXY'];
+delete process.env['https_proxy'];
+delete process.env['HTTPS_PROXY'];
 export class CustomXmlHttpClient extends FPrinterCustom.Client {
 
     private static XML_RESPONSE = 'response';
@@ -101,6 +107,7 @@ export class CustomXmlHttpClient extends FPrinterCustom.Client {
         const resXmlStr: string = await new Promise((resolve, reject) => {
             axios
             .post(url, xmlStr, {
+                proxy: false,
                 headers
             })
             .then((res) => {

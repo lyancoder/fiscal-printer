@@ -3,7 +3,12 @@ import * as xmlbuilder from 'xmlbuilder';
 import { Parser } from 'xml2js';
 import { FPrinterRCH } from "../../constants/RCH/fprinter.RCH";
 import { RCHProtocol } from "../../constants/RCH/RCH.type";
+import process from 'process';
 
+delete process.env['http_proxy'];
+delete process.env['HTTP_PROXY'];
+delete process.env['https_proxy'];
+delete process.env['HTTPS_PROXY'];
 export class RCHXmlHttpClient extends FPrinterRCH.Client {
 
     private static XML_ROOT = 'Service';
@@ -38,6 +43,7 @@ export class RCHXmlHttpClient extends FPrinterRCH.Client {
         const resXmlStr: string = await new Promise((resolve, reject) => {
             axios
                 .post(url, xmlStr, {
+                    proxy: false,
                     headers: {
                         'Content-Type': 'application/xml'
                     }

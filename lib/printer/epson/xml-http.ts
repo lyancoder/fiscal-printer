@@ -3,7 +3,12 @@ import { Fiscal } from "../../constants/fiscal.type";
 import { FPrinter } from "../../constants/fprinter.type";
 import * as xmlbuilder from 'xmlbuilder';
 import { Parser } from 'xml2js';
+import process from 'process';
 
+delete process.env['http_proxy'];
+delete process.env['HTTP_PROXY'];
+delete process.env['https_proxy'];
+delete process.env['HTTPS_PROXY'];
 export class EpsonXmlHttpClient extends FPrinter.Client {
 
     private static XML_ROOT = 's:Envelope';
@@ -141,6 +146,7 @@ export class EpsonXmlHttpClient extends FPrinter.Client {
         const resXmlStr: string = await new Promise((resolve, reject) => {
             axios
                 .post(url, xmlStr, {
+                    proxy: false,
                     headers: {
                         'Content-Type': 'text/xml;charset=utf-8'
                     }
