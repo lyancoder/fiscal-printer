@@ -1,7 +1,7 @@
 {
     "name": "epson-fiscal-printer",
     "author": "lyancoder",
-    "version": "1.1.22",
+    "version": "1.1.23",
     "description": "A typescript module for fiscal printers support.",
     "keywords": [
         "fiscal",
