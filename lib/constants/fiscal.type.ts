@@ -293,13 +293,10 @@ export namespace Fiscal {
         // EFTPOS_GET_CURRENT_TOTAL,
         // END_TRAINING,
         // GET_DATE,
-        // PRINT_CONTENT_BY_DATE,
         // PRINT_CONTENT_BY_NUMBERS,
         // PRINT_DUPLICATE_RECEIPT,
         // PRINT_REC_CASH,
         // PRINT_REC_VOID,
-        // QUERY_CONTENT_BY_DATE,
-        // QUERY_CONTENT_BY_NUMBERS,
         QUERY_PRINTER_STATUS,
         REBOOT_WEB_SERVER,
         RESET_PRINTER,
@@ -308,6 +305,9 @@ export namespace Fiscal {
         GET_NATIVE_CODE_FUNCTION,
         DISPLAY_TEXT,
         PRINT_CONTENT_BY_NUMBERS,
+        QUERY_CONTENT_BY_DATE,
+        QUERY_CONTENT_BY_NUMBERS,
+        PRINT_CONTENT_BY_DATE,
     }
 
     // indicates the type of data to collect:

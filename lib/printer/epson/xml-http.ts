@@ -62,7 +62,42 @@ export class EpsonXmlHttpClient extends FPrinter.Client {
                 fromNumber: command.data?.fromNumber || '',
                 toNumber: command.data?.toNumber || '',
             });
-        }
+        },
+        [Fiscal.CommandCode.QUERY_CONTENT_BY_DATE]: (printerCommand: xmlbuilder.XMLElement, command: Fiscal.Command) => {
+            printerCommand.ele('queryContentByDate', {
+                operator: command.data?.operator ?? 1,
+                dataType: command.data?.dataType ?? Fiscal.DataType.ALL,
+                fromDay: command.data?.fromDay || '',
+                fromMonth: command.data?.fromMonth || '',
+                fromYear: command.data?.fromYear || '',
+                toDay: command.data?.toDay || '',
+                toMonth: command.data?.toMonth || '',
+                toYear: command.data?.toYear || '',
+            });
+        },
+        [Fiscal.CommandCode.QUERY_CONTENT_BY_NUMBERS]: (printerCommand: xmlbuilder.XMLElement, command: Fiscal.Command) => {
+            printerCommand.ele('queryContentByNumbers', {
+                operator: command.data?.operator ?? 1,
+                dataType: command.data?.dataType ?? Fiscal.DataType.ALL,
+                day: command.data?.day || '',
+                month: command.data?.month || '',
+                year: command.data?.year || '',
+                fromNumber: command.data?.fromNumber || '',
+                toNumber: command.data?.toNumber || '',
+            });
+        },
+        [Fiscal.CommandCode.PRINT_CONTENT_BY_DATE]: (printerCommand: xmlbuilder.XMLElement, command: Fiscal.Command) => {
+            printerCommand.ele('printContentByDate', {
+                operator: command.data?.operator ?? 1,
+                dataType: command.data?.dataType ?? Fiscal.DataType.ALL,
+                fromDay: command.data?.fromDay || '',
+                fromMonth: command.data?.fromMonth || '',
+                fromYear: command.data?.fromYear || '',
+                toDay: command.data?.toDay || '',
+                toMonth: command.data?.toMonth || '',
+                toYear: command.data?.toYear || '',
+            });
+        },
     }
 
     /**
