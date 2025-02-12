@@ -37,6 +37,7 @@ export namespace Fiscal {
         graphicCoupon?: GraphicCoupon;
         openDrawer?: OpenDrawer;
         personalTaxCode?: Message;
+        customerRow?: Message;
     }
 
     export type Report = {

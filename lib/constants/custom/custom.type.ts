@@ -29,6 +29,7 @@ export namespace CustomProtocol {
         personalTaxCode?: Message;
         beginDisplayText?: DisplayText;
         endDisplayText?: DisplayText;
+        customerRow?: Message;
     }
 
     export type Report = {

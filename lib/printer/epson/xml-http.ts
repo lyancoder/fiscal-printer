@@ -266,6 +266,15 @@ export class EpsonXmlHttpClient extends FPrinter.Client {
     private convertReceiptToXmlDoc(receipt: Fiscal.Receipt): xmlbuilder.XMLDocument {
         // init
         const printerFiscalReceipt = xmlbuilder.create('printerFiscalReceipt');
+        if (receipt.customerRow) { 
+            const { message = '', messageType = Fiscal.MessageType.ADDITIONAL_HEADER, index = 1 } = receipt.customerRow;
+            printerFiscalReceipt.ele('printRecMessage', {
+                message,
+                messageType,
+                index,
+                operator: receipt.customerRow.operator ?? 1,
+            });
+        }
         // begin
         printerFiscalReceipt.ele('beginFiscalReceipt', { operator: receipt.operator ?? 1 });
         // sales

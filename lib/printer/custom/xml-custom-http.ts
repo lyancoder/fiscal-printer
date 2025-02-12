@@ -188,6 +188,14 @@ export class CustomXmlHttpClient extends FPrinterCustom.Client {
         const printerFiscalReceipt = xmlbuilder.create('printerFiscalReceipt', CustomXmlHttpClient.XML_HEADER);
         // begin
         printerFiscalReceipt.ele('beginFiscalReceipt');
+        if (receipt.customerRow) {
+            const { message = '', messageType = '1', font = '1' } = receipt.customerRow;
+            printerFiscalReceipt.ele('printRecMessage', {
+                message,
+                messageType,
+                font
+            });
+        }
         if (receipt.beginDisplayText) {
             printerFiscalReceipt.ele('displayText', {
                 data: receipt.beginDisplayText.data || ''
