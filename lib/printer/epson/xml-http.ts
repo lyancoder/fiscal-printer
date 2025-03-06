@@ -275,12 +275,9 @@ export class EpsonXmlHttpClient extends FPrinter.Client {
                 operator
             });
         }
-        // begin
-        printerFiscalReceipt.ele('beginFiscalReceipt', { operator: receipt.operator ?? 1 });
-        // sales
         // personalTaxCode
         if (receipt.personalTaxCode) { 
-            const { message = '', messageType = Fiscal.MessageType.CUSTOMER_ID, index = 1 } = receipt.personalTaxCode;
+            const { message = '', messageType = Fiscal.MessageType.CUSTOMER_ID, index = 2 } = receipt.personalTaxCode;
             printerFiscalReceipt.ele('printRecMessage', {
                 message,
                 messageType,
@@ -288,6 +285,9 @@ export class EpsonXmlHttpClient extends FPrinter.Client {
                 operator: receipt.personalTaxCode.operator ?? 1,
             });
         }
+        // begin
+        printerFiscalReceipt.ele('beginFiscalReceipt', { operator: receipt.operator ?? 1 });
+        // sales
         if (receipt.sales && receipt.sales.length > 0) {
             for (const sale of receipt.sales) {
                 // sale or return
