@@ -30,6 +30,7 @@ export namespace CustomProtocol {
         beginDisplayText?: DisplayText;
         endDisplayText?: DisplayText;
         customerRow?: Message;
+        itemsDetail?: Message[];
     }
 
     export type Report = {

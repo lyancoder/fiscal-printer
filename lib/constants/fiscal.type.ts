@@ -38,6 +38,7 @@ export namespace Fiscal {
         openDrawer?: OpenDrawer;
         personalTaxCode?: Message;
         customerRow?: Message;
+        itemsDetail?: Message[];
     }
 
     export type Report = {

@@ -264,6 +264,16 @@ export class CustomXmlHttpClient extends FPrinterCustom.Client {
                 }
             }
         }
+        if (receipt.itemsDetail && receipt.itemsDetail.length) {
+            for (let item of receipt.itemsDetail) {
+                const { message = '', messageType = '1', font = '1' } = item;
+                printerFiscalReceipt.ele('printRecMessage', {
+                    message,
+                    messageType,
+                    font
+                });
+            }
+        }
         // personalTaxCode
         if (receipt.personalTaxCode) {
             const { message = '', messageType = '3', font = 'B' } = receipt.personalTaxCode;

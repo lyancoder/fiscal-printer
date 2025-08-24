@@ -354,6 +354,17 @@ export class EpsonXmlHttpClient extends FPrinter.Client {
                 }
             }
         }
+        if (receipt.itemsDetail && receipt.itemsDetail.length) {
+            for (let item of receipt.itemsDetail) {
+                const { message = '', messageType = Fiscal.MessageType.ADDITIONAL_HEADER, index = 1, operator = 1 } = item;
+                printerFiscalReceipt.ele('printRecMessage', {
+                    message,
+                    messageType,
+                    index,
+                    operator
+                });
+            }
+        }
         // refunds
         if (receipt.refunds && receipt.refunds.length > 0) {
             for (const refund of receipt.refunds) {
