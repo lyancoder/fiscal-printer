@@ -356,7 +356,7 @@ export class EpsonXmlHttpClient extends FPrinter.Client {
         }
         if (receipt.itemsDetail && receipt.itemsDetail.length) {
             for (let item of receipt.itemsDetail) {
-                const { message = '', messageType = Fiscal.MessageType.ADDITIONAL_HEADER, index = 1, operator = 1 } = item;
+                const { message = '', messageType = Fiscal.MessageType.ADDITIONAL_DESC, index = 1, operator = 1 } = item;
                 printerFiscalReceipt.ele('printRecMessage', {
                     message,
                     messageType,
