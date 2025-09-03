@@ -363,6 +363,25 @@ export class CustomXmlHttpClient extends FPrinterCustom.Client {
                 data: receipt.endDisplayText.data || ''
             });
         }
+        if (receipt.trailer && receipt.trailer.length > 0) {
+            for (let item of receipt.trailer) {
+                const { message = '', messageType = '4', font = '1' } = item;
+                printerFiscalReceipt.ele('printRecMessage', {
+                    message,
+                    messageType,
+                    font
+                });
+            }
+        }
+        if (receipt.printRowTrailer && receipt.printRowTrailer.length > 0) {
+            for (let item of receipt.printRowTrailer) {
+                const { font = '1', line = '' } = item;
+                printerFiscalReceipt.ele('printRowTrailer', {
+                    line,
+                    font
+                });
+            }
+        }
         // end
         printerFiscalReceipt.ele('endFiscalReceiptCut');
         return printerFiscalReceipt;

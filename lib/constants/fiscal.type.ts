@@ -39,6 +39,7 @@ export namespace Fiscal {
         personalTaxCode?: Message;
         customerRow?: Message;
         itemsDetail?: Message[];
+        trailer?: Message[];
     }
 
     export type Report = {

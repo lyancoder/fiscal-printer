@@ -31,6 +31,13 @@ export namespace CustomProtocol {
         endDisplayText?: DisplayText;
         customerRow?: Message;
         itemsDetail?: Message[];
+        trailer?: Message[];
+        printRowTrailer?: RowTrailer[];
+    }
+
+    export type RowTrailer = {
+        font: string;
+        line: string;
     }
 
     export type Report = {
